@@ -1,0 +1,42 @@
+<simulation>
+  <!-- Scene description -->
+  <RequiredPlugin name="SofaOpenglVisual" />
+  <RequiredPlugin name="SofaSparseSolver" />
+  <VisualStyle displayFlags="showVisual" />
+  <CollisionPipeline name="CollisionPipeline" verbose="0" />
+  
+  <!-- Cube 1 -->
+  <Node name="Cube1">
+    <EulerImplicitSolver name="cg_odesolver" rayleighStiffness="0.1" rayleighMass="0.1" />
+    <CGLinearSolver name="linear solver" iterations="100" tolerance="1e-12" threshold="1e-12" />
+    <MechanicalObject name="mo" template="Vec3d" position="0 0 0, 1 0 0, 0 1 0, 1 1 0, 0 0 1, 1 0 1, 0 1 1, 1 1 1" />
+    <UniformMass name="mass" totalMass="1.0" />
+    <BoxCollisionModel name="collision" contactStiffness="1000" contactFriction="0.1" />
+    <Node name="visual" >
+      <OglModel name="visual" fileMesh="mesh/cube.obj" color="1 0 0" />
+    </Node>
+    <FixedConstraint name="FixedConstraint" indices="0" />
+  </Node>
+  
+  <!-- Cube 2 -->
+  <Node name="Cube2" position="2 0 0">
+    <EulerImplicitSolver name="cg_odesolver" rayleighStiffness="0.1" rayleighMass="0.1" />
+    <CGLinearSolver name="linear solver" iterations="100" tolerance="1e-12" threshold="1e-12" />
+    <MechanicalObject name="mo" template="Vec3d" position="0 0 0, 1 0 0, 0 1 0, 1 1 0, 0 0 1, 1 0 1, 0 1 1, 1 1 1" />
+    <UniformMass name="mass" totalMass="1.0" />
+    <BoxCollisionModel name="collision" contactStiffness="1000" contactFriction="0.1" />
+    <Node name="visual" >
+      <OglModel name="visual" fileMesh="mesh/cube.obj" color="0 1 0" />
+    </Node>
+    <FixedConstraint name="FixedConstraint" indices="0" />
+  </Node>
+  <!-- Simulation -->
+  <Node name="root" dt="0.01" >
+    <CollisionPipeline />
+    <BruteForceDetection name="N2" />
+    <MinProximityIntersection name="Proximity" alarmDistance="0.5" contactDistance="0.1" />
+    <DefaultContactManager name="Response" response="FrictionContact" responseParams="mu=0.1" />
+    <Node name="Cube1" />
+    <Node name="Cube2" />
+  </Node>
+</simulation>
