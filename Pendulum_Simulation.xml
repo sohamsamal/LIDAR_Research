@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Node name="rootNode" dt="0.01">
+ 
+    <!-- Required plugins -->
+    <RequiredPlugin name="SofaGeneralEngine" />
+    <RequiredPlugin name="SofaOpenglVisual" />
+ 
+    <!-- Create a visual model for the cube -->
+    <Node name="cubeNode">
+        <VisualStyle displayFlags="showBehaviorModels" />
+        <OglModel name="cubeModel" fileObj="mesh/cube.obj" />
+        <MechanicalObject name="cubeDOFs" template="Vec3d" />
+        <RegularGridTopology nx="2" ny="2" nz="2" />
+        <UniformMass totalMass="1" />
+        <BoxROI box="-0.1 -0.1 -0.1 0.1 0.1 0.1" />
+        <BilateralInteractionConstraint name="collision" />
+        <Node name="Visu">
+            <OglModel name="VisuModel" src="@../cubeModel" />
+        </Node>
+    </Node>
+ 
+    <!-- Create a visual model for the pendulum -->
+    <Node name="pendulumNode">
+        <VisualStyle displayFlags="showBehaviorModels" />
+        <OglModel name="pendulumModel" fileObj="mesh/pendulum.obj" />
+        <MechanicalObject name="pendulumDOFs" template="Vec3d" />
+        <RegularGridTopology nx="2" ny="2" nz="2" />
+        <UniformMass totalMass="0.1" />
+        <SphereROI center="0 0 -0.5" radius="0.1" />
+        <BilateralInteractionConstraint name="collision" />
+        <Node name="Visu">
+            <OglModel name="VisuModel" src="@../pendulumModel" />
+        </Node>
+    </Node>
+ 
+    <!-- Connect the cube and pendulum with a hinge constraint -->
+    <Node name="hingeNode">
+        <HingeConstraint name="hinge" indices="@../cubeDOFs/@indexes,@../pendulumDOFs/@indexes" />
+    </Node>
+ 
+    <!-- Set up the simulation parameters -->
+    <Node name="root" gravity="0 -9.8 0">
+        <EulerImplicitSolver name="odeSolver" />
+        <CGLinearSolver iterations="25" tolerance="1e-9" threshold="1e-9" name="linearSolver" />
+        <DefaultPipeline name="collisionResponse" verbose="0">
+            <CollisionPipeline />
+            <CollisionResponse />
+        </DefaultPipeline>
+        <Node name="child1">
+            <Node name="dynamics">
+                <Node name="ode" solver="odeSolver">
+                    <MechanicalObject name="dofs" template="Vec3d" />
+                    <UniformMass totalMass="1" />
+                    <MeshSpringForceField stiffness="200" damping="0.5" />
+                    <GravityField acceleration="0 -9.8 0" />
+                    <CylindricalConstraint name="groundConstraint" direction="0 1 0" position="0 0 0" radius="1e-6" />
+                    <BilateralInteractionConstraint name="collision" />
+                </Node>
+                <Node name="response">
+                    <CollisionResponse />
+                </Node>
+            </Node>
+        </Node>
+    </Node>
+</Node>
