@@ -1,4 +1,4 @@
-#LIDAR Actuator Simulator for Soft Robots
+# LIDAR Actuator Simulator For Soft Robots
 
 Our goal for this project was to tackle how to implement an actuator simulator for soft robots using SOFA simulation software. In the first few weeks, we focused primarily on understanding what SOFA is, why it is advantageous over other simulation softwares, and taking notes on different components of SOFA features, such as state vectors and solvers. Over the next few weeks, we slowly began installing all the recommended libraries such as SPLIB. 
 
@@ -10,7 +10,7 @@ The process used to model this type of collision is summarized here: first, we d
 
 Lastly, we configured the simulation by defining the time step size and initial conditions. 
 
-#Pendulum Object
+# Pendulum Object
 
 This scene consists of three nodes: cubeNode, pendulumNode, and hingeNode.
 
@@ -22,7 +22,7 @@ hingeNode contains a HingeConstraint that connects the degrees of freedom of the
 
 Finally, the root node sets up the simulation parameters, including the solver and constraints. The EulerImplicitSolver is used as the solver, and a CGLinearSolver is used to solve linear systems. The DefaultPipeline is used to handle collisions, and a number of constraints are applied to the dynamics node to simulate the interaction between the cube, pendulum, and ground.
 
-#Two Cubes Collision
+# Two Cubes Collision
 
 In this scene file, there are two cube objects named "Cube1" and "Cube2" that are each defined using a similar set of mechanical components. Each cube has a MechanicalObject to represent its vertices, a UniformMass to give it a mass of 1.0, and a BoxCollisionModel to define its collision shape. Each cube is also fixed to prevent them from moving by adding a FixedConstraint to the first vertex of each MechanicalObject.
 
